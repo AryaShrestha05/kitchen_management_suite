@@ -1,0 +1,44 @@
+@startuml
+@startchen
+left to right direction
+
+entity User {
+    User ID <<key>>
+    Name
+    Username
+    Email
+    Date of Birth
+    Password
+}
+entity Household {
+    Household ID <<key>>
+    Members
+}
+entity Items {
+    Item ID <<key>>
+    Item Name
+    Quantity
+    Item In Date
+    Owner
+}
+relationship Member {
+    Role
+}
+entity Recipe {
+    Recipe ID <<key>>
+    Recipe Body
+    Recipe Name
+}
+relationship Holds {
+}
+
+User -N- Member
+Member -M- Household
+Holds -N- Items
+
+User -N- Holds
+Holds -M- Recipe
+Household -N- Holds
+
+@endchen
+@enduml
