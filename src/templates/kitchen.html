@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>KMS | Login</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <title>KMS | Kitchen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 <header>
@@ -16,16 +16,8 @@
     </nav>
 </header>
 <main class="container">
-    <h2>Login</h2>
-    <form>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-
-        <button type="submit">Login</button>
-    </form>
+    <h2>Kitchen</h2>
+    <p>This is the kitchen page.</p>
 </main>
 <footer>
     <p>&copy; 2025 Kitchen Management Suite</p>
