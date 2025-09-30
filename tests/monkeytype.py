@@ -91,12 +91,8 @@ if not num_users:
 if not num_households:
     num_households = int(input("Enter number of households to generate: "))
 
-# if num households > num_users, set num_households = num_users
-if num_households > num_users:
-    num_households = num_users
-    print(f"Number of households can't exceed number of users. Setting number of households to {num_users}.")
-
 def gen_email(name: str, birth: str = None) -> str:
+    # generates semi realistic email
     name = name.lower()
     parts = name.split()
     first = parts[0]
@@ -143,6 +139,7 @@ def gen_email(name: str, birth: str = None) -> str:
 
 # create users
 def generate_users(num) -> str:
+    # generates users
     for _ in range(num):
         user = user_struct.copy()
         user["UserID"] = _
@@ -152,10 +149,11 @@ def generate_users(num) -> str:
         user["Password"] = fake.password(length = fake.random_int(8, 16))
         users.append(user)
         print(f"Generated user {_+1}/{num}")
-    with open("dummy_users.json", "w") as f:
+    with open("json/dummy_users.json", "w") as f:
         json.dump(users, f, indent=4)
 
-def generate_households(num_house, num_user) -> str:
+def generate_households(num_house) -> str:
+    # generates households
     num_households = num_house
     total_users = len(users)
     print(f"Generating {num_households} households for {total_users} users")
@@ -163,44 +161,42 @@ def generate_households(num_house, num_user) -> str:
     # reset existing households
     households.clear()
 
-    # initialize empty households
+    # create an empty households
     for hid in range(num_households):
         print(f"  Initializing household {hid+1}/{num_households}")
         house = {"HouseholdID": hid, "HouseholdName": "", "Members": []}
         households.append(house)
 
-    # Phase 1: ensure every user is assigned at least once to a random household
+    # every user should be assigned to at least once to a random household
     for user in users:
         hid = fake.random_int(0, num_households - 1)
         if user["UserID"] not in households[hid]["Members"]:
             households[hid]["Members"].append(user["UserID"])
 
-    # Phase 2: try to get roughly even distribution (each household should have at least this many members)
-    min_members = max(1, total_users // num_households)
+    # every household should have at least one member
     for hid, house in enumerate(households):
-        print(f"  Ensuring household {hid+1} has at least {min_members} members (currently {len(house['Members'])})")
-        attempts = 0
-        while len(house["Members"]) < min_members and attempts < total_users * 2:
+        if not house["Members"]:
+            print(f"  Household {hid+1} is empty: assigning one random user")
             candidate = fake.random_element(users)
-            if candidate["UserID"] not in house["Members"]:
-                house["Members"].append(candidate["UserID"])
-            attempts += 1
+            house["Members"].append(candidate["UserID"])
 
-    # Set household names using the first member as admin (fallback if empty)
+    # Set household names using the first member as admin
     for house in households:
         if house["Members"]:
             admin_id = house["Members"][0]
             admin = next((u for u in users if u["UserID"] == admin_id), None)
             house["HouseholdName"] = (admin["UserName"] + " Household") if admin else f"Household {house['HouseholdID']}"
         else:
+            # if no members, household name will default to "Household {id}"
             house["HouseholdName"] = f"Household {house['HouseholdID']}"
 
-    with open("dummy_households.json", "w") as f:
+    with open("json/dummy_households.json", "w") as f:
         json.dump(households, f, indent=4)
 
 def generate(num_users, num_households) -> str:
+    # main generator function
     generate_users(num_users)
-    generate_households(num_households, num_users)
+    generate_households(num_households)
 
 # run the generator
 # usage: python monkeytype.py --users <int> --households <int>

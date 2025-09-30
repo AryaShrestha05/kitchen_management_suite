@@ -1,0 +1,47 @@
+[
+    {
+        "HouseholdID": 0,
+        "HouseholdName": "Hayley Beasley Household",
+        "Members": [
+            0,
+            9,
+            12
+        ]
+    },
+    {
+        "HouseholdID": 1,
+        "HouseholdName": "Jared Brown Household",
+        "Members": [
+            1,
+            5,
+            7,
+            8,
+            10
+        ]
+    },
+    {
+        "HouseholdID": 2,
+        "HouseholdName": "Matthew Carter Household",
+        "Members": [
+            4,
+            6,
+            11
+        ]
+    },
+    {
+        "HouseholdID": 3,
+        "HouseholdName": "Curtis Bryant Household",
+        "Members": [
+            14
+        ]
+    },
+    {
+        "HouseholdID": 4,
+        "HouseholdName": "Jessica Romero Household",
+        "Members": [
+            2,
+            3,
+            13
+        ]
+    }
+]
