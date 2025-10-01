@@ -1,7 +1,7 @@
 """
 File: households.py
 File-Path: src/db/schema/households.py
-Author: Rohan Plante
+Author: Rohan Plante, Thomas Bruce
 Date-Created: 09-30-2025
 
 Description:
@@ -18,19 +18,20 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from db.server import Base
 
-class Recipe(Base):
+class Household(Base):
     """class for the household table"""
     __tablename__ = 'Households'
 
-    HouseholdID = Column(Integer, primary_key = True, autoincrement=True) # default to increment, change once ID format is decided
-    HouseholdName = Column(String(40))
-    Members = Column(String) # use feed & .add in session to add members
-                             # session.query(Households).all()/.get(1) to access
+    HouseholdID = Column(Integer, primary_key=True, autoincrement=True)  # TODO: deal with UUIDv4
+    HouseholdName = Column(String(100))
 
-    household_recipes = relationship("HouseholdRecipe", back_populates="recipe")
-
+    # relationships
+    household_recipes = relationship("HouseholdRecipe", back_populates="household")
+    members = relationship("Member", back_populates="household")
     recipes = relationship("Recipe", secondary="HouseholdRecipes", viewonly=True)
+    users = relationship("User", secondary="Members", viewonly=True)
 
-def __repr__(self):
-    return f"""
-        HOUSEHOLD NAME: {self.HouseholdName}, MEMBERS: {self.Members}"""
+    def __repr__(self):
+        return f"""
+        HOUSEHOLD: {self.HouseholdName} (ID: {self.HouseholdID})
+        """

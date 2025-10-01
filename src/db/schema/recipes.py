@@ -1,7 +1,7 @@
 """
 File: recipe.py
 File-Path: src/db/schema/recipes.py
-Author: Rohan Plante
+Author: Rohan Plante, Thomas Bruce
 Date-Created: 09-29-2025
 
 Description:
@@ -32,6 +32,7 @@ class Recipe(Base):
     household = relationship("Household", secondary="HouseholdRecipes", viewonly=True)
     users = relationship("User", secondary="UserRecipes", viewonly=True)
 
-def __repr__(self):
-    return f"""
-        RECIPE NAME: {self.RecipeName}, RECIPE BODY: {self.RecipeBody}"""
+    def __repr__(self):
+        return f"""
+        RECIPE NAME: {self.RecipeName}, RECIPE BODY: {self.RecipeBody}
+        """
