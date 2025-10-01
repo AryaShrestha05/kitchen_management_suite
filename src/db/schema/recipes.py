@@ -15,6 +15,7 @@ Outputs:
     The mapped `Recipe` class usable with SQLAlchemy sessions and __repr__ for debug
 """
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from db.server import Base
 
@@ -23,7 +24,7 @@ class Recipe(Base):
     __tablename__ = 'Recipes'
 
     RecipeID = Column(Integer, primary_key = True, autoincrement=True) # default to increment, change once ID format is decided
-    RecipeBody = Column(Text)
+    RecipeBody = Column(JSONB)
     RecipeName = Column(String(40))
 
     household_recipes = relationship("HouseholdRecipe", back_populates="recipe")
