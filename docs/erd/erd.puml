@@ -14,6 +14,10 @@ entity Household {
     Household ID <<key>>
     Members
 }
+entity Pantry {
+    Pantry ID <<key>>
+    Pantry Name
+}
 entity Items {
     Item ID <<key>>
     Item Name
@@ -31,10 +35,16 @@ entity Recipe {
 }
 relationship Holds {
 }
-
+relationship Contains {
+}
+relationship Owns {
+}
 User -N- Member
 Member -M- Household
-Holds -N- Items
+Household -1- Owns
+Owns -M- Pantry
+Pantry -1- Contains
+Contains -M- Items 
 
 User -N- Holds
 Holds -M- Recipe
