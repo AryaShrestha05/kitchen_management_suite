@@ -20,8 +20,8 @@ from flask import Flask, render_template
 
 from db.server import engine, Base
 
-# schema import
-# from db.schema.schema import <schemas> TODO
+# schema imports
+from db.schema import user, households, member, recipes
 
 app = Flask(__name__)
 
