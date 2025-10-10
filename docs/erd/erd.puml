@@ -1,6 +1,5 @@
 @startuml
 @startchen
-left to right direction
 
 entity User {
     User ID <<key>>
@@ -12,7 +11,8 @@ entity User {
 }
 entity Household {
     Household ID <<key>>
-    Members
+    First Name
+    Last Name
 }
 entity Pantry {
     Pantry ID <<key>>
@@ -23,7 +23,6 @@ entity Items {
     Item Name
     Quantity
     Item In Date
-    Owner
 }
 relationship Member {
     Role
@@ -39,6 +38,10 @@ relationship Contains {
 }
 relationship Owns {
 }
+relationship Adds {
+}
+relationship Authors {
+}
 User -N- Member
 Member -M- Household
 Household -1- Owns
@@ -46,9 +49,12 @@ Owns -M- Pantry
 Pantry -1- Contains
 Contains -M- Items 
 
-User -N- Holds
-Holds -M- Recipe
-Household -N- Holds
+User -M- Authors
+Authors -N- Recipe
+User -M- Adds
+Adds -N- Items
+Holds -N- Recipe
+Household -M- Holds
 
 @endchen
 @enduml
