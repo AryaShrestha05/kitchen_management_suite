@@ -27,13 +27,10 @@ class Recipe(Base):
     RecipeBody = Column(JSONB)
     RecipeName = Column(String(40))
 
-    household_recipes = relationship("HouseholdRecipe", back_populates="recipe")
-    user_recipes = relationship("UserRecipe", back_populates="recipe")
-
-    household = relationship("Household", secondary="HouseholdRecipes", viewonly=True)
-    users = relationship("User", secondary="UserRecipes", viewonly=True)
+    users = relationship("User", secondary="Authors", back_populates="recipes")
+    households = relationship("Household", secondary="HouseholdRecipes", back_populates="recipes")
 
     def __repr__(self):
         return f"""
-        RECIPE NAME: {self.RecipeName}, RECIPE BODY: {self.RecipeBody}
+        RECIPE NAME: {self.RecipeName}
         """

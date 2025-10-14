@@ -26,11 +26,10 @@ class Household(Base):
     HouseholdName = Column(String(100))
 
     # relationships
-    household_recipes = relationship("HouseholdRecipe", back_populates="household")
-    members = relationship("Member", back_populates="household")
-    recipes = relationship("Recipe", secondary="HouseholdRecipes", viewonly=True)
-    users = relationship("User", secondary="Members", viewonly=True)
-
+    members = relationship("User", secondary="Member", back_populates="households")
+    pantries = relationship("Pantry", secondary="Owns", back_populates="household")
+    recipes = relationship("Recipe", secondary="Holds", back_populates="households")
+    
     def __repr__(self):
         return f"""
         HOUSEHOLD: {self.HouseholdName} (ID: {self.HouseholdID})
