@@ -1,6 +1,6 @@
 """
-File: items.py
-File-Path: src/db/schema/items.py
+File: item.py
+File-Path: src/db/schema/.py
 Author: Rohan Plante
 Date-Created: 10-14-2025
 
@@ -19,7 +19,7 @@ from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.orm import relationship
 from db.server import Base
 
-class Items(Base):
+class Item(Base):
     __tablename__ = 'Items'
 
     ItemID = Column(Integer, primary_key = True, autoincrement=True)
@@ -27,8 +27,11 @@ class Items(Base):
     Quantity = Column(Integer)
     ItemInDate = Column(Date)
 
-    users = relationship("Users", secondary="Adds", back_populates="items")
-    pantries = relationship("Pantry", secondary="Contains", back_populates="items")
+    adds = relationship("Add", back_populates="items")
+    users = relationship("User", secondary="Adds", viewonly=True)
+
+    contains = relationship("Contain", back_populates="items")
+    pantries = relationship("Pantry", secondary="Contains", viewonly=True)
 
     def __repr__(self):
         return f"""

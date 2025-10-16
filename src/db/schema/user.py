@@ -1,7 +1,7 @@
 """
 File: user.py
 File-Path: src/db/schema/user.py
-Author: Thomas Bruce
+Author: Thomas Bruce, Rohan Plante
 Date-Created: 09-30-2025
 
 Description:
@@ -28,18 +28,23 @@ class User(Base):
     __tablename__ = 'Users'
 
     UserID = Column(Integer, primary_key=True, autoincrement=True)  # TODO: deal with UUIDv4
-    Name = Column(String(100))
+    FirstName = Column(String(50))
+    LastName = Column(String(50))
     Username = Column(String(50), unique=True)
     Email = Column(String(100), unique=True)
     DateOfBirth = Column(Date)
     Password = Column(String(255))
 
     # relationships
-    user_recipes = relationship("UserRecipe", back_populates="user")
-    memberships = relationship("Member", back_populates="user")
+    authors = relationship("Author", back_populates="users")
+    recipes = relationship("Recipe", secondary="Authors", viewonly=True)
 
-    recipes = relationship("Recipe", secondary="UserRecipes", viewonly=True)
+    members = relationship("Member", back_populates="users")
     households = relationship("Household", secondary="Members", viewonly=True)
+    
+    adds = relationship("Add", back_populates="users")
+    items = relationship("Item", secondary="Adds", back_populates=True)
+
 
     def __repr__(self):
         return f"""

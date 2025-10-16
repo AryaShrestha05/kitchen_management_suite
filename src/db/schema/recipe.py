@@ -1,6 +1,6 @@
 """
 File: recipe.py
-File-Path: src/db/schema/recipes.py
+File-Path: src/db/schema/recipe.py
 Author: Rohan Plante, Thomas Bruce
 Date-Created: 09-29-2025
 
@@ -27,8 +27,11 @@ class Recipe(Base):
     RecipeBody = Column(JSONB)
     RecipeName = Column(String(40))
 
-    users = relationship("User", secondary="Authors", back_populates="recipes")
-    households = relationship("Household", secondary="HouseholdRecipes", back_populates="recipes")
+    authors = relationship("Author", back_populates="authors")
+    users = relationship("User", secondary="Authors", viewonly=True)
+
+    holds = relationship("Hold", back_populates="recipes")
+    households = relationship("Household", secondary="Holds", viewonly=True)
 
     def __repr__(self):
         return f"""
