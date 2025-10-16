@@ -1,7 +1,7 @@
 """
 File: member.py
 File-Path: src/db/schema/member.py
-Author: Thomas Bruce
+Author: Thomas Bruce, Rohan Plante
 Date-Created: 09-30-2025
 
 Description:
@@ -24,15 +24,17 @@ class Member(Base):
     """class for the member junction table"""
     __tablename__ = 'Members'
 
-    UserID = Column(Integer, ForeignKey('Users.UserID'), primary_key=True)
-    HouseholdID = Column(Integer, ForeignKey('Households.HouseholdID'), primary_key=True)
-    Role = Column(String(50))
+    Member_ID = Column(Integer, primary_key=True, autoincrement=True)
+    UserID = Column(Integer, ForeignKey('Users.UserID'))
+    HouseholdID = Column(Integer, ForeignKey('Households.HouseholdID'))
+    RoleID = Column(Integer, ForeignKey("Roles.RoleID"))
 
     # relationships
-    user = relationship("User", back_populates="memberships")
-    household = relationship("Household", back_populates="members")
+    users = relationship("User", back_populates="members")
+    households = relationship("Household", back_populates="members")
+    roles = relationship("Role", back_populates="members")
 
     def __repr__(self):
         return f"""
-        MEMBER: UserID {self.UserID} in HouseholdID {self.HouseholdID}, ROLE: {self.Role}
+        MEMBER: UserID {self.UserID} in HouseholdID {self.HouseholdID}, ROLE: {self.RoleID}
         """
