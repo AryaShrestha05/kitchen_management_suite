@@ -43,7 +43,7 @@ class User(Base):
     households = relationship("Household", secondary="Members", viewonly=True)
     
     adds = relationship("Add", back_populates="users")
-    items = relationship("Item", secondary="Adds", back_populates=True)
+    items = relationship("Item", secondary="Adds", viewonly=True)
 
 
     def __repr__(self):

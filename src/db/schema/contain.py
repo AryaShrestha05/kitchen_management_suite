@@ -26,5 +26,5 @@ class Contain(Base):
 
     def __repr__(self):
         return f"""
-        Item ID: {self.ItemID} contained in Pantry ID: {self.PantruID}
+        Item ID: {self.ItemID} contained in Pantry ID: {self.PantryID}
         """
