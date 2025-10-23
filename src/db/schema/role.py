@@ -20,12 +20,13 @@ from sqlalchemy.orm import relationship
 from db.server import Base
 
 class Role(Base):
+    """class for the role table"""
     __tablename__ = "Roles"
     RoleID = Column(Integer, primary_key=True, autoincrement=True)
     RoleName = Column(String(30))
 
     # relationships
-    members = relationship("Member", back_populates="roles")
+    members = relationship("Member", back_populates="role")
 
     def __repr__(self):
         return f"""

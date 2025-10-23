@@ -21,7 +21,7 @@ from flask import Flask, render_template
 from db.server import engine, Base
 
 # schema imports
-from db.schema import household, recipe, user, member
+from db.schema import adds, authors, holds, household, item, member, pantry, recipe, role, user_nutrition, user_profile, user
 
 app = Flask(__name__)
 

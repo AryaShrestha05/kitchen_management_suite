@@ -1,8 +1,8 @@
-' PlantUML ER Diagram
+' Created-By: Rohan Plante, Thomas Bruce
 @startuml
 @startchen
+left to right direction
 
-' Define entities
 entity User {
     User ID <<key>>
     First Name
@@ -13,12 +13,30 @@ entity User {
     Password
 }
 
-entity Item {
-    Item ID <<key>>
+entity UserProfile {
+    Profile ID <<key>>
     User ID <<FK>>
-    Item Name
-    Item In Date
-    Quantity
+    Height
+    Weight
+    Calorie Goal
+    Dietary Preferences
+    Allergies
+}
+
+entity UserNutrition {
+    ' UserNutrition: stores calorie and macronutrient data per user.
+    ' Allows daily tracking/logging and dietary goal management.
+    Nutrition ID <<key>>
+    User ID <<FK>>
+    Date
+    Time
+    Calories Consumed
+    Protein
+    Carbs
+    Fat
+    Fiber
+    Sugar
+    Sodium
 }
 
 entity Role {
@@ -36,15 +54,28 @@ entity Pantry {
     Pantry Name
 }
 
-entity Recipe {
-    Recipe ID <<key>>
-    User ID <<FK>>
-    Household ID <<FK>>
-    Recipe Body
-    Recipe Name
+entity Item {
+    Item ID <<key>>
+    Item Name
+    Item Body
+    Source
+    ' e.g., "openfoodfacts", "custom"
+    IsGlobal
+    ' boolean: true if from Open Food Facts
 }
 
-' Membership -> associative entity (between User and Household)
+entity Recipe {
+    Recipe ID <<key>>
+    Recipe Name
+    Recipe Body
+    Source
+    ' e.g., "fathub", "custom"
+    IsGlobal
+    ' boolean: true if from Fathub dataset
+}
+
+' Associative  Entities
+' Member: connects Users and Households with Roles
 entity Member {
     Member ID <<key>>
     User ID <<FK>>
@@ -52,46 +83,76 @@ entity Member {
     Role ID <<FK>>
 }
 
-' Define relationships
-relationship Holds {
+' Adds: connects User, Item, and Pantry
+' Tracks who added what to where and when.
+entity Adds {
+    Adds ID <<key>>
+    User ID <<FK>>
+    Pantry ID <<FK>>
+    Item ID <<FK>>
+    Quantity
+    Item In Date
 }
 
-relationship Contains {
+' Authors: Connects User, Household, and Recipe.
+' Tracks which User (added/created) a Recipe in which Household.
+entity Authors {
+    Authors ID <<key>>
+    User ID <<FK>>
+    Household ID <<FK>>
+    Recipe ID <<FK>>
+    Date Added
+    IsCustom
+    ' boolean: true if recipe is custom to this household/user
 }
 
-relationship Owns {
+' Holds: connects Households with Recipes they use or save.
+entity Holds {
+    Holds ID <<key>>
+    Household ID <<FK>>
+    Recipe ID <<FK>>
 }
 
-relationship Adds {
-}
+' Relationships
+' User <-> UserProfile
+' Each User has exactly one Profile
+User -1- UserProfile
 
-relationship Authors {
-}
+' User <-> UserNutrition
+' Each User can have multiple Nutrition records/logs
+User -M- UserNutrition
 
-
-' Create connections between relationships & entities
-' --- User <-> Member <-> Household
+' User <-> Member <-> Household
+' A User can belong to many Households
+' A Household can have many Users.
 User -N- Member
 Member -M- Household
 
-' --- Member -> Role
+' Member <-> Role
+' Each Member has exactly one Role (Admin, Member, Guest)
 Member -1- Role
 
-' --- Household <-> Pantry <-> Items
-Household -1- Owns
-Owns -M- Pantry
-Pantry -1- Contains
-Contains -M- Item
+' Household <-> Pantry
+' Each Household owns exactly one Pantry.
+Household -1- Pantry
 
-' --- User <-> Recipe (author/creator)
-User -M- Authors
-Authors -N- Recipe
-
-' --- User <-> Items (ownership)
+' User <-> Adds <-> Item & Pantry
+' A User can add many Items to a Pantry.
+' Each Adds record links one User, one Pantry, and one Item.
 User -M- Adds
 Adds -N- Item
+Adds -1- Pantry
 
-' --- Household <-> Recipe (shared by household)
+' User <-> Household <-> Recipe
+' A User can author many Recipes within a specific Household.
+' A Recipe can be authored in multiple Households by different Users.
+User -M- Authors
+Household -M- Authors
+Recipe -N- Authors
+
+' Household <-> Holds <-> Recipe
+' A Household can hold (save/use) multiple Recipes.
+' Recipes can appear in multiple Households.
 Household -M- Holds
 Holds -N- Recipe
 

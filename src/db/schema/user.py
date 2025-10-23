@@ -27,26 +27,26 @@ class User(Base):
     """class for the user table"""
     __tablename__ = 'Users'
 
-    UserID = Column(Integer, primary_key=True, autoincrement=True)  # TODO: deal with UUIDv4
+    UserID = Column(Integer, primary_key=True, autoincrement=True)
     FirstName = Column(String(50))
     LastName = Column(String(50))
     Username = Column(String(50), unique=True)
-    Email = Column(String(100), unique=True)
+    Email = Column(String(100))
     DateOfBirth = Column(Date)
     Password = Column(String(255))
 
-    # relationships
-    authors = relationship("Author", back_populates="users")
-    recipes = relationship("Recipe", secondary="Authors", viewonly=True)
-
-    members = relationship("Member", back_populates="users")
-    households = relationship("Household", secondary="Members", viewonly=True)
+    # relationships to junction tables
+    profile = relationship("UserProfile", back_populates="user", uselist=False)
+    nutrition_logs = relationship("UserNutrition", back_populates="user")
+    members = relationship("Member", back_populates="user")
+    adds = relationship("Adds", back_populates="user")
+    authors = relationship("Authors", back_populates="user")
     
-    adds = relationship("Add", back_populates="users")
+    households = relationship("Household", secondary="Members", viewonly=True)
     items = relationship("Item", secondary="Adds", viewonly=True)
-
+    recipes = relationship("Recipe", secondary="Authors", viewonly=True)
 
     def __repr__(self):
         return f"""
-        USER: {self.Username}, NAME: {self.Name}, EMAIL: {self.Email}
+        USER: {self.Username}, NAME: {self.FirstName} {self.LastName}, EMAIL: {self.Email}
         """

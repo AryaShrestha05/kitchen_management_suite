@@ -22,18 +22,17 @@ class Household(Base):
     """class for the household table"""
     __tablename__ = 'Households'
 
-    HouseholdID = Column(Integer, primary_key=True, autoincrement=True)  # TODO: deal with UUIDv4
-    HouseholdName = Column(String(100))
+    HouseholdID = Column(Integer, primary_key=True, autoincrement=True)
+    HouseholdName = Column(String(100), nullable=False)
 
     # relationships
-    members = relationship("Member", back_populates="households")
+    pantry = relationship("Pantry", back_populates="household", uselist=False)
+    members = relationship("Member", back_populates="household")
+    authors = relationship("Authors", back_populates="household")
+    holds = relationship("Holds", back_populates="household")
+    
     users = relationship("User", secondary="Members", viewonly=True)
-
-    holds = relationship("Hold", back_populates="households")
     recipes = relationship("Recipe", secondary="Holds", viewonly=True)
-
-    owns = relationship("Own", back_populates="household")
-    pantries = relationship("Pantry", secondary="Owns", viewonly=True)
     
     def __repr__(self):
         return f"""

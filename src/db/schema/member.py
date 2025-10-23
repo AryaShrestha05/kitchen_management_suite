@@ -10,13 +10,13 @@ Description:
 
 Inputs:
     SQLAlchemy types/relationship helpers and the declarative Base
-    and other ORM models (User, Household)
+    and other ORM models (User, Household, Role)
 
 Outputs:
     The mapped `Member` class usable with SQLAlchemy sessions and __repr__ for debug
 """
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from db.server import Base
 
@@ -24,17 +24,17 @@ class Member(Base):
     """class for the member junction table"""
     __tablename__ = 'Members'
 
-    Member_ID = Column(Integer, primary_key=True, autoincrement=True)
-    UserID = Column(Integer, ForeignKey('Users.UserID'))
-    HouseholdID = Column(Integer, ForeignKey('Households.HouseholdID'))
-    RoleID = Column(Integer, ForeignKey("Roles.RoleID"))
+    MemberID = Column(Integer, primary_key=True, autoincrement=True)
+    UserID = Column(Integer, ForeignKey('Users.UserID'), nullable=False)
+    HouseholdID = Column(Integer, ForeignKey('Households.HouseholdID'), nullable=False)
+    RoleID = Column(Integer, ForeignKey("Roles.RoleID"), nullable=False)
 
     # relationships
-    users = relationship("User", back_populates="members")
-    households = relationship("Household", back_populates="members")
-    roles = relationship("Role", back_populates="members")
+    user = relationship("User", back_populates="members")
+    household = relationship("Household", back_populates="members")
+    role = relationship("Role", back_populates="members")
 
     def __repr__(self):
         return f"""
-        MEMBER: UserID {self.UserID} in HouseholdID {self.HouseholdID}, ROLE: {self.RoleID}
+        MEMBER: UserID {self.UserID} in HouseholdID {self.HouseholdID}, RoleID: {self.RoleID}
         """

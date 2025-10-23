@@ -16,10 +16,8 @@ Outputs:
 """
 
 import os
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-
 from dotenv import load_dotenv
 
 # load env
@@ -46,7 +44,7 @@ def init_database():
     """Initialize database tables"""
     try:
         # import all of the tables
-        from db.schema import Add, Author, Contain, Hold, Household, Item, Member, Own, Pantry, Recipe, Role, User
+        from db.schema import Adds, Authors, Holds, Household, Item, Member, Pantry, Recipe, Role, User, UserNutrition, UserProfile
         # create all of the tables
         Base.metadata.create_all(bind=engine)
         print(f"\n\n----------- Connection successful!")
