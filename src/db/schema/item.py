@@ -1,40 +1,42 @@
 """
 File: item.py
-File-Path: src/db/schema/items.py
-Author: Noah Yurasko
-Date-Created: 10-29-2025
+File-Path: src/db/schema/item.py
+Author: Rohan Plante
+Date-Created: 10-14-2025
 
 Description:
-    ORM declaration of Item Table
+    SQLAlchemy ORM model for the Item entity ('Items' table).
+    Items can be global (from Open Food Facts) or custom.
 
 Inputs:
     SQLAlchemy types/relationship helpers and the declarative Base
-    and other ORM models (User, Household)
+    and other ORM models (Pantry, User)
 
 Outputs:
-       The mapped `Member` class usable with SQLAlchemy sessions and __repr__ for debug
-
+    The mapped `Item` class usable with SQLAlchemy sessions and __repr__ for debug
 """
-from sqlalchemy import Column, Integer, String
+
+from sqlalchemy import Column, Integer, String, Boolean, Text
 from sqlalchemy.orm import relationship
 from db.server import Base
 
 class Item(Base):
-    """class for the items table"""
-    __tablename__ = 'item'
+    """class for the item table"""
+    __tablename__ = 'Items'
 
-    ItemId = Column(Integer, primary_key = True, autoincrement=True) 
-    ItemName = Column(String(40))
-    ItemQuantity = Column(Integer)
-    ItemInDate = Column(String(40)) #We need to decide on a standard for storing datetimes
-    ItemOwner = String(Integer)#Contains User ID
+    ItemID = Column(Integer, primary_key=True, autoincrement=True)
+    ItemName = Column(String(100), nullable=False)
+    ItemBody = Column(Text)  # JSON or text description of the item
+    Source = Column(String(50))  # e.g., "openfoodfacts", "custom"
+    IsGlobal = Column(Boolean, default=False)  # true if from Open Food Facts
 
-    pantry_items = relationship("Pantry", back_populates="item")
-    household = relationship("Household", secondary="Pantry", viewonly=True)
-
-    #If we wanated we could also do a relation between owner and the item
-    # owner = relationship("User", secondary="Household?", viewonly=True)
-
-def __repr__(self):
-    return f"""
-        ITEM NAME: {self.ItemName}, ITEM OWNER: {self.ItmeOwner}"""
+    # relationships
+    adds = relationship("Adds", back_populates="item")
+    
+    users = relationship("User", secondary="Adds", viewonly=True)
+    pantries = relationship("Pantry", secondary="Adds", viewonly=True)
+    
+    def __repr__(self):
+        return f"""
+        ITEM NAME: {self.ItemName}
+        """

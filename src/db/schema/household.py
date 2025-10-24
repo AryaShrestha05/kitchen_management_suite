@@ -1,6 +1,6 @@
 """
-File: households.py
-File-Path: src/db/schema/households.py
+File: household.py
+File-Path: src/db/schema/household.py
 Author: Rohan Plante, Thomas Bruce
 Date-Created: 09-30-2025
 
@@ -22,15 +22,18 @@ class Household(Base):
     """class for the household table"""
     __tablename__ = 'Households'
 
-    HouseholdID = Column(Integer, primary_key=True, autoincrement=True)  # TODO: deal with UUIDv4
-    HouseholdName = Column(String(100))
+    HouseholdID = Column(Integer, primary_key=True, autoincrement=True)
+    HouseholdName = Column(String(100), nullable=False)
 
     # relationships
-    household_recipes = relationship("HouseholdRecipe", back_populates="household")
+    pantry = relationship("Pantry", back_populates="household", uselist=False)
     members = relationship("Member", back_populates="household")
-    recipes = relationship("Recipe", secondary="HouseholdRecipes", viewonly=True)
+    authors = relationship("Authors", back_populates="household")
+    holds = relationship("Holds", back_populates="household")
+    
     users = relationship("User", secondary="Members", viewonly=True)
-
+    recipes = relationship("Recipe", secondary="Holds", viewonly=True)
+    
     def __repr__(self):
         return f"""
         HOUSEHOLD: {self.HouseholdName} (ID: {self.HouseholdID})
